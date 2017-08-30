@@ -1,0 +1,180 @@
+<head>
+  <title>siteace</title>
+</head>
+
+<body>
+	
+</body>
+
+<template name="ApplicationLayout">
+  {{> yield "navbar"}}
+  {{> yield "main"}}
+  {{> yield "comment"}}
+  {{> yield "recommended"}}
+  
+</template>
+
+
+<template name="navbar">
+	<!-- navbar  - you will be putting the login functions here -->
+	<nav class="navbar navbar-default">
+	  <div class="container">
+	    <div class="navbar-header">
+	      <a class="navbar-brand" href="/">
+	        Site Ace
+	      </a>
+	      <form role="search" class="navbar-form navbar-left">
+      		<div class="form-group">
+		      	<!--input id="search" type="text" placeholder="Search" class="form-control js-search-go"-->
+		      	{{> EasySearch.Input index=websitesIndex attributes=attributes}}
+		      </div>
+	      	<button class="btn btn-default" type="submit">Search</button>
+	      </form>
+	      <div class="nav navbar-right">
+	      	{{> loginButtons}}
+	      </div>
+	    </div>
+	  </div>
+	</nav>
+</template>
+<template name="main">
+	<div class="container">
+		{{> website_form}}
+		{{> website_list}}
+	</div>
+</template>
+
+<template name="website_form">
+	{{#if currentUser}}
+	<a class="btn btn-default js-toggle-website-form" href="#">
+  		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+	</a>
+	<div id="website_form" class="hidden_div">
+		<form class="js-save-website-form">
+		  <div class="form-group">
+		    <label for="url">Site address *</label>
+		    <input type="text" class="form-control js-http-on" id="url" placeholder="http://www.mysite.com">
+		  </div>
+		  <div class="form-group">
+		    <label for="title">Title</label>
+		    <input type="text" class="form-control" id="title" placeholder="Mysite">
+		  </div>
+		  <div class="form-group">
+		    <label for="description">Description *</label>
+		    <input type="text" class="form-control" id="description" placeholder="I found this site really useful for ...">
+		  </div>
+
+			<p id="validnote">(*) - Please fill out all neccessery fields</p>
+
+		  <button type="submit" class="btn btn-default">Submit</button>
+		</form>
+	</div>
+	{{/if}}
+</template>
+
+<!-- template that displays several website items -->
+<template name="website_list">
+	<div id="result_wrapper">
+		<div class="searchinfo">{{getText searchCount}}</div>
+		<ol id="list_result">
+		{{#EasySearch.Each index=websitesIndex}}
+	        {{> website_item_in_loop}}
+	    {{/EasySearch.Each}}
+		</ol>
+	</div>
+
+</template>
+
+<!-- template that displays individual website entries -->
+<template name="website_item_in_loop">
+<li>
+	{{>website_item}}
+	<div class="row">
+		<div class="col-md-12">
+			<a href="/website/{{_id}}" class="btn btn-default">Details</a>
+		</div>
+	</div>
+</li>
+</template>
+
+<!-- template that displays one website on individual page -->
+<template name="website_item_on_page">
+	<div class="container">
+		<div class="panel panel-default">
+			<div class="panel-body">
+			{{>website_item}}
+			</div>
+		</div>
+	</div>
+</template>
+
+<!-- template that displays one website -->
+<template name="website_item">
+	<div class="row">
+		<div class="col-md-10">
+			<a href="{{url}}">{{title}}</a>
+			<p>
+				{{description}}
+			</p>
+			<div class="createdate">Added: {{getDate createdOn}}</div>
+		</div>
+		<div class="col-md-2">
+			<a href="#" class="btn btn-default js-upvote">
+				<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"> {{vote_up}}</span>
+			</a>
+			<a href="#" class="btn btn-default js-downvote">
+				<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"> {{vote_down}}</span>
+			</a>
+		</div>
+	</div>
+</template>
+
+<template name="comments">
+	<div class="container">
+		<h3>Comments</h3>
+		{{#each comments}}
+			<div class="row">
+				<div class="col-sm-1">
+					<div class="thumbnail">
+						<img src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="img-responsive user-photo">
+					</div><!-- /thumbnail -->
+				</div><!-- /col-sm-1 -->
+
+				<div class="col-sm-11">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<strong>{{getUser userid}}</strong> <span class="text-muted">{{getDate createdOn}}</span>
+						</div>
+						<div class="panel-body">
+						{{message}}
+						</div><!-- /panel-body -->
+					</div><!-- /panel panel-default -->
+				</div><!-- /col-sm-5 -->
+			</div>
+			
+		{{/each}}
+
+		{{#if currentUser}}
+		<h4>Leave comment</h4>
+		<form class="js-add-comment">
+			<textarea class="form-control" rows="3" id="message"></textarea>
+			<br/>
+			<button class="btn btn-default">Send Comment</button>
+		</form>
+		{{else}}
+		<p>Only signed in users could leave comments</p>
+		{{/if}}
+	</div>
+</template>
+<template name="recommended">
+	{{#if currentUser}}
+	<div class="container">
+		<h1>Recommended websites</h1>
+		{{#each recommends}}
+		<ul>
+	        {{> website_item_in_loop}}
+		</ul>
+		{{/each}}
+	</div>
+	{{/if}}
+</template>

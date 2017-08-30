@@ -1,0 +1,45 @@
+/* CSS declarations go here */
+.hidden_div{
+	display:none;
+}
+#login-buttons{
+    line-height: 20px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+}
+.novalid{
+	background-color:#f2dede;
+}
+#validnote.novalid{
+	background-color:#fff;
+	color:#a94442;
+	font-weight:bold;
+}
+ol li,ul li{
+	background-color: #fff;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+	margin-bottom: 20px;
+	border-color: #ddd;
+	padding: 15px;
+}
+li:before {
+    padding-right: 8px;
+    color: blue; /* Or a color you prefer */
+}
+.createdate{
+	color:#999;
+	font-style: italic;
+}
+#website_form{
+	margin-bottom:10px;
+}
+.loading{
+	margin-left:45%;
+	margin-bottom: 50px;
+}
+.searchinfo{
+	display:none;
+	padding:20px;
+}
